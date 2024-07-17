@@ -22,10 +22,10 @@ export default function Home({ countries }) {
   }, [searchInput, selectedRegion, countries]);
 
   const formatNumber = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "";
   };
 
-  const regions = ["All", ...new Set(countries.map(country => country.region))];
+  const regions = ["All", ...new Set(countries.map(country => country.region || "Unknown"))];
 
   return (
     <div className="space-y-6">
@@ -69,26 +69,30 @@ export default function Home({ countries }) {
               {filteredCountries.map((country) => (
                 <tr key={country.name.official} className="hover:bg-gray-700 transition-colors">
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <Link href={`/${country.name.official.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-blue-400">
-                      {country.name.common}
+                    <Link href={`/${country.name.official?.toLowerCase().replace(/\s+/g, '-') || 'unknown'}`} className="hover:text-blue-400">
+                      {country.name.common || "Unknown"}
                     </Link>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <Image
-                      src={country.flags.svg}
-                      alt={`Flag of ${country.name.common}`}
-                      width={32}
-                      height={32}
-                      className="rounded-sm"
-                    />
+                    {country.flags?.svg ? (
+                      <Image
+                        src={country.flags.svg}
+                        alt={`Flag of ${country.name.common || "Unknown"}`}
+                        width={32}
+                        height={32}
+                        className="rounded-sm"
+                      />
+                    ) : (
+                      <span>No flag</span>
+                    )}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    {isClient ? formatNumber(country.population) : country.population}
+                    {isClient ? formatNumber(country.population) : (country.population || "Unknown")}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    {isClient ? formatNumber(country.area) : country.area}
+                    {isClient ? formatNumber(country.area) : (country.area || "Unknown")}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap">{country.region}</td>
+                  <td className="px-4 py-4 whitespace-nowrap">{country.region || "Unknown"}</td>
                 </tr>
               ))}
             </tbody>
