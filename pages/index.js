@@ -6,8 +6,8 @@ import Link from "next/link";
 export default function Home({ countries }) {
   const [isClient, setIsClient] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredCountries, setFilteredCountries] = useState(countries);
   const [selectedRegion, setSelectedRegion] = useState("All");
+  const [filteredCountries, setFilteredCountries] = useState(countries);
 
   useEffect(() => {
     setIsClient(true);
